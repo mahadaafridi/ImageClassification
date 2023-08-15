@@ -1,16 +1,32 @@
-# This is a sample Python script.
+import tensorflow as tf
+import os
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import cv2
+import imghdr
+
+#this is used to prevent out of memory errors
+gpus = tf.config.experimental.list_physical_devices('GPU')
+for gpu in gpus: #go through every gpus inside of it and run this on every one of them
+    tf.config.experimental.set_memory_growth(gpu, True)
+
+# pshows how many gpus there are available
+# gpus = tf.config.experimental.list_physical_devices('GPU')
+# num_gpus = len(gpus)
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+data_dir = 'data'
+image_exts = ['jpeg', 'jpg', 'bmp', 'png']
 
-
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+for image_class in os.listdir(data_dir): #this will loop through each folder
+    #loop through each image in the subdirectery
+    for image in os.listdir(os.path.join(data_dir, image_class)):
+        image_path = os.path.join(data_dir, image_class, image)
+        try:
+            #opens up the image as a numpy array
+            img = cv2.imread(image_path)
+            tip = imghdr.what(image_path)
+            if tip not in image_exts:
+                print('Image not in ext list {}'.format(image_path))
+                os.remove(image_path)
+        except Exception as e:
+            print('Issue with image {}'.format(image_path))
