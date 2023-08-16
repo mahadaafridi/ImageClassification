@@ -30,3 +30,4 @@ for image_class in os.listdir(data_dir): #this will loop through each folder
                 os.remove(image_path)
         except Exception as e:
             print('Issue with image {}'.format(image_path))
+print('works')
