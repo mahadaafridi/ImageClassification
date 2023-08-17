@@ -93,3 +93,31 @@ model.add(Dense(256, activation='relu'))
 model.add(Dense(1, activation='sigmoid'))
 
 model.compile('adam', loss=tf.losses.BinaryCrossentropy(), metrics=['accuracy'])
+
+#training
+
+logdir = 'logs'
+
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir = logdir)
+
+#pass in our training data
+#hist contains all the training data
+hist = model.fit(train, epochs = 5, validation_data =val, callbacks =[tensorboard_callback])
+
+#plotting the data
+
+#this plots loss, need to make sure that the loss and val_loss decrease over time
+fig = plt.figure()
+plt.plot(hist.history['loss'], color='teal', label='loss')
+plt.plot(hist.history['val_loss'], color='orange', label='val_loss')
+fig.suptitle('Loss', fontsize=20)
+plt.legend(loc="upper left")
+plt.show()
+
+#this plots accuracy, you want to make sure that the accuracy is increasing over time
+fig = plt.figure()
+plt.plot(hist.history['accuracy'], color='teal', label='accuracy')
+plt.plot(hist.history['val_accuracy'], color='orange', label='val_accuracy')
+fig.suptitle('Accuracy', fontsize=20)
+plt.legend(loc="upper left")
+plt.show()
