@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Dropout
 
+from tensorflow.keras.metrics import Precision, Recall, BinaryAccuracy
 #this is used to prevent out of memory errors
 gpus = tf.config.experimental.list_physical_devices('GPU')
 for gpu in gpus: #go through every gpus inside of it and run this on every one of them
@@ -102,7 +103,7 @@ tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir = logdir)
 
 #pass in our training data
 #hist contains all the training data
-hist = model.fit(train, epochs = 5, validation_data =val, callbacks =[tensorboard_callback])
+hist = model.fit(train, epochs = 20, validation_data =val, callbacks =[tensorboard_callback])
 
 #plotting the data
 
@@ -121,3 +122,35 @@ plt.plot(hist.history['val_accuracy'], color='orange', label='val_accuracy')
 fig.suptitle('Accuracy', fontsize=20)
 plt.legend(loc="upper left")
 plt.show()
+
+
+#testing the model
+precision = Precision()
+recall = Recall()
+accuracy = BinaryAccuracy()
+
+for batch in test.as_numpy_iterator(): #iterate through the testing batches
+    X, y = batch #unpack the batch
+    yhat = model.predict(X)
+    #yhat is our predicted true value, y is our true value
+    precision.update_state(y, yhat)
+    recall.update_state(y, yhat)
+    accuracy.update_state(y, yhat)
+
+#print the results, want higher values for all of these
+print(precision.result(), recall.result(), accuracy.result())
+
+
+img = cv2.imread('depressed_test2.jpg')
+plt.imshow(img)
+plt.show()
+
+resize = tf.image.resize(img, (256,256))
+plt.imshow(resize.numpy().astype(int))
+plt.show()
+
+yhat = model.predict(np.expand_dims(resize/255, 0))
+if yhat > 0.5:
+    print(f'Predicted class is Depressed')
+else:
+    print(f'Predicted class is Angry')
