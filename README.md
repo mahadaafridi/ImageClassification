@@ -14,16 +14,7 @@ This project demonstrates image classification using a Convolutional Neural Netw
 
 
 ## Dataset
-
-data/
-  ├── Depressed/
-  │   ├── image1.jpg
-  │   ├── image2.jpg
-  │   └── ...
-  └── Angry/
-      ├── image1.jpg
-      ├── image2.jpg
-      └── ...
+The Data will be contained in the Data folder and images put into their respective type, "Angry" or "Depressed".
 
 ## Model-Architecture
 
