@@ -6,11 +6,10 @@ This project demonstrates image classification using a Convolutional Neural Netw
 
 ## Table of Contents
 
-- [Installation](#installation)
-- [Dataset](#dataset)
-- [Model Architecture](#model-architecture)
-- [Training](#training)
-- [Evaluation](#evaluation)
+- [Dataset](#Dataset)
+- [Model Architecture](#Model-Architecture)
+- [Training](#Training)
+- [Evaluation](#Evaluation)
 - [Usage](#Usage)
 
 
